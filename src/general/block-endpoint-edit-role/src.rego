@@ -1,5 +1,3 @@
-
-
 package blockendpointeditrole
 
 violation[{"msg": msg}] {
