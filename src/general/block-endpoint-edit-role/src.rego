@@ -1,15 +1,11 @@
+
+
 package blockendpointeditrole
 
 violation[{"msg": msg}] {
     input.review.object.metadata.name == "system:aggregate-to-edit"
     endpointRule(input.review.object.rules[_])
-    msg := "ClusterRole system:aggregate-to-edit should not allowed endpoint permissions"
-}
-
-violation[{"msg": msg}] {
-    input.review.object.metadata.name == "system:aggregate-to-edit"
-    not disableAutoupdate(input.review.object.metadata.annotations)
-    msg := "ClusterRole system:aggregate-to-edit is required rbac.authorization.kubernetes.io/autoupdate=false after reconciled none endpoint permission"
+    msg := "ClusterRole system:aggregate-to-edit should not allow endpoint edit permissions. For k8s version < 1.22, the Cluster Role should be annotated with rbac.authorization.kubernetes.io/autoupdate=false to prevent autoreconciliation back to default permissions for this role."
 }
 
 endpointRule(rule) {
@@ -18,15 +14,13 @@ endpointRule(rule) {
 }
 
 hasEditVerb(verbs) {
-	"create" == verbs[_]
+    "create" == verbs[_]
 }
+
 hasEditVerb(verbs) {
     "patch" == verbs[_]
 }
-hasEditVerb(verbs) {
-	"update" == verbs[_]
-}
 
-disableAutoupdate(annotations) {
-	annotations["rbac.authorization.kubernetes.io/autoupdate"] == "false"
+hasEditVerb(verbs) {
+    "update" == verbs[_]
 }
