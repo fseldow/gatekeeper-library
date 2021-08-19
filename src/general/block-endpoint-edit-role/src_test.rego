@@ -1,4 +1,4 @@
-package k8sblockendpointeditrole
+package k8sblockendpointeditdefaultrole
 
 test_input_no_endpoints_edit_role_allow {
     input := { "review": input_review_withoutendpoints }
