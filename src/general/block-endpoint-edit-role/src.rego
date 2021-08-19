@@ -1,4 +1,4 @@
-package blockendpointeditrole
+package k8sblockendpointeditrole
 
 violation[{"msg": msg}] {
     input.review.object.metadata.name == "system:aggregate-to-edit"
