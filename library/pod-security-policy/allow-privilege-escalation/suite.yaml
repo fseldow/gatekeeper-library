@@ -11,7 +11,15 @@ tests:
         object: samples/psp-allow-privilege-escalation-container/example_allowed.yaml
         assertions:
           - violations: no
+      - name: example-uid-allowed
+        object: samples/psp-allow-privilege-escalation-container/example_allowed-uid.yaml
+        assertions:
+          - violations: no
       - name: example-disallowed
         object: samples/psp-allow-privilege-escalation-container/example_disallowed.yaml
+        assertions:
+          - violations: yes
+      - name: example-uid-disallowed
+        object: samples/psp-allow-privilege-escalation-container/example_disallowed-uid.yaml
         assertions:
           - violations: yes

@@ -15,20 +15,25 @@ test_input_one_container_with_exemption {
     results := violation with input as input
     count(results) == 0
 }
+test_input_pod_uid_privilege_escalation {
+    input := { "review": input_review_uid_many, "parameters": {"exemptImages": ["three/*"]}}
+    results := violation with input as input
+    count(results) == 1
+}
 test_input_container_many_not_privilege_escalation_allowed {
     input := { "review": input_review_many}
     results := violation with input as input
-    count(results) == 2
+    count(results) == 1
 }
 test_input_container_many_mixed_privilege_escalation_not_allowed {
     input := { "review": input_review_many_mixed}
     results := violation with input as input
-    count(results) == 3
+    count(results) == 2
 }
 test_input_container_many_mixed_privilege_escalation_not_allowed_one_exempted {
     input := { "review": input_review_many_mixed, "parameters": {"exemptImages": ["one/*"]}}
     results := violation with input as input
-    count(results) == 2
+    count(results) == 1
 }
 test_input_container_many_mixed_privilege_escalation_not_allowed_all_exempted {
     input := { "review": input_review_many_mixed, "parameters": {"exemptImages": ["one/*", "two/*", "three/*"]}}
@@ -74,6 +79,21 @@ input_review_many = {
       }
     }
 }
+
+input_review_uid_many = {
+    "object": {
+        "metadata": {
+            "name": "nginx"
+        },
+        "spec": {
+            "securityContext":{
+                "runAsUser": 200
+            },
+            "containers": input_containers_many
+      }
+    }
+}
+
 
 input_review_many_mixed = {
     "object": {
@@ -133,9 +153,15 @@ input_containers_many = [
     "name": "nginx2",
     "image": "three/nginx",
     "securityContext": {
-      "runAsUser": "1000"
+      "runAsUser": 1000
+    }    
+},
+{
+    "name": "nginx3",
+    "image": "four/nginx",
+    "securityContext": {
+      "runAsUser": 0
     }
-    
 }]
 
 input_containers_many_mixed = [

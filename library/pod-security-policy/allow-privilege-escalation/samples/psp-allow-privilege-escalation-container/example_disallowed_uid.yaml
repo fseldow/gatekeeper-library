@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-privilege-escalation-uid-disallow
+  labels:
+    app: nginx-privilege-escalation
+spec:
+  nodeSelector:
+    kubernetes.io/os: linux
+  securityContext:
+    runAsUser: 200
+  containers:
+  - name: nginx
+    image: nginx
